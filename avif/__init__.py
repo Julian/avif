@@ -1,1 +1,1 @@
-from avif._api import AVIFError
+from avif._api import AVIFError, Decoder
