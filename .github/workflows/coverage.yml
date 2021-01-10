@@ -24,7 +24,7 @@ jobs:
         curl -L 'https://github.com/AOMediaCodec/libavif/archive/v0.8.4.tar.gz' | tar xzf - &&
         cd libavif* &&
         mkdir build && cd build &&
-        cmake .. -DBUILD_SHARED_LIBS=OFF &&
+        cmake .. &&
         make -j $(($(nproc) + 1)) &&
         sudo make install
     - name: Collect & Upload Coverage
