@@ -5,8 +5,8 @@ Python-equivalent of ``avif_example_decode_file.c``.
 import os
 import sys
 
-from avif import AVIFError
 from _avif import ffi, lib
+from avif import AVIFError
 
 
 def main():
