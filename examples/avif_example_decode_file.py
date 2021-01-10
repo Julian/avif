@@ -13,9 +13,9 @@ def main():
 
     rgb = ffi.new("avifRGBImage*")
     decoder = lib.avifDecoderCreate()
-    result = lib.avifDecoderSetIOFile(decoder, filename)  # TODO: nonexistent file
 
-    result = lib.avifDecoderParse(decoder)  # TODO: failed decode
+    lib.avifDecoderSetIOFile(decoder, filename)  # TODO: nonexistent file
+    lib.avifDecoderParse(decoder)  # TODO: failed decode
 
     image = decoder.image
     print(f"Parsed AVIF: {image.width}x{image.height} ({image.depth}bpc)")
