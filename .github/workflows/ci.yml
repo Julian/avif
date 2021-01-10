@@ -72,5 +72,8 @@ jobs:
         cmake .. &&
         make -j $(($(nproc) + 1)) &&
         sudo make install
+    - name: Add /usr/local/lib to LD_LIBRARY_PATH
+      run: echo 'LD_LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
+      if: runner.os == 'Linux'
     - name: Run tox
       run: python -m tox -e "${{ matrix.python-version.toxenv }}"
