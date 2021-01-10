@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  release:
+    types: [published]
+  schedule:
+    # Daily at 9:21
+    - cron: '21 9 * * *'
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        python-version:
+          - name: pypy3
+            toxenv: pypy3-build
+          - name: pypy3
+            toxenv: pypy3-safety
+          - name: pypy3
+            toxenv: pypy3-tests
+          - name: 3.7
+            toxenv: py37-build
+          - name: 3.7
+            toxenv: py37-safety
+          - name: 3.7
+            toxenv: py37-tests
+          - name: 3.8
+            toxenv: py38-build
+          - name: 3.8
+            toxenv: py38-safety
+          - name: 3.8
+            toxenv: py38-tests
+          - name: 3.9
+            toxenv: py39-build
+          - name: 3.9
+            toxenv: py39-safety
+          - name: 3.9
+            toxenv: py39-tests
+          - name: 3.9
+            toxenv: readme
+          - name: 3.9
+            toxenv: secrets
+          - name: 3.9
+            toxenv: style
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version.name }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version.name }}
+    - name: Ensure we have new enough versions to respect python_version
+      run: python -m pip install -U pip setuptools
+    - name: Install docs dependencies
+      run: sudo apt-get install -y libenchant-dev
+      if: runner.os == 'Linux' && startsWith(matrix.python-version.toxenv, 'docs-')
+    - name: Install docs dependencies
+      run: brew install enchant
+      if: runner.os == 'macOS' && startsWith(matrix.python-version.toxenv, 'docs-')
+    - name: Install tox
+      run: python -m pip install tox
+    - name: Install dependencies
+      run: >
+        curl -L 'https://github.com/AOMediaCodec/libavif/archive/v0.8.4.tar.gz' | tar xzf - &&
+        cd libavif* &&
+        mkdir build && cd build &&
+        cmake .. -DBUILD_SHARED_LIBS=OFF &&
+        make -j $(($(nproc) + 1)) &&
+        sudo make install
+    - name: Run tox
+      run: python -m tox -e "${{ matrix.python-version.toxenv }}"
