@@ -5,6 +5,7 @@ Python-equivalent of ``avif_example_decode_file.c``.
 import os
 import sys
 
+from avif import AVIFError
 from _avif import ffi, lib
 
 
@@ -16,7 +17,8 @@ def main():
 
     lib.avifDecoderSetIOFile(decoder, filename)  # TODO: nonexistent file
     result = lib.avifDecoderParse(decoder)  # TODO: failed decode
-    print(ffi.string(lib.avifResultToString(result)))
+    if result != lib.AVIF_RESULT_OK:
+        raise AVIFError.from_result(result)
 
     image = decoder.image
     print(f"Parsed AVIF: {image.width}x{image.height} ({image.depth}bpc)")
