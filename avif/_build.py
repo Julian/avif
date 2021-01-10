@@ -20,13 +20,18 @@ ffi.cdef(
         uint32_t depth; // all planes must share this depth; if depth>8, all planes are uint16_t internally
         ...;
     } avifImage;
+
     typedef struct {
         avifImage * image;
         ...;
     } avifDecoder;
+
     typedef enum {
         AVIF_RESULT_OK = ...,
     } avifResult;
+
+    const char * avifResultToString(avifResult result);
+
     typedef struct {
         uint32_t width;       // must match associated avifImage
         uint32_t height;      // must match associated avifImage
@@ -45,6 +50,8 @@ ffi.cdef(
     avifResult avifImageYUVToRGB(const avifImage * image, avifRGBImage * rgb);
 
     avifDecoder * avifDecoderCreate(void);
+    void avifDecoderDestroy(avifDecoder * decoder);
+
     avifResult avifDecoderSetIOMemory(avifDecoder * decoder, const uint8_t * data, size_t size);
     avifResult avifDecoderSetIOFile(avifDecoder * decoder, const char * filename);
     avifResult avifDecoderParse(avifDecoder * decoder);

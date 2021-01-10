@@ -15,7 +15,8 @@ def main():
     decoder = lib.avifDecoderCreate()
 
     lib.avifDecoderSetIOFile(decoder, filename)  # TODO: nonexistent file
-    lib.avifDecoderParse(decoder)  # TODO: failed decode
+    result = lib.avifDecoderParse(decoder)  # TODO: failed decode
+    print(ffi.string(lib.avifResultToString(result)))
 
     image = decoder.image
     print(f"Parsed AVIF: {image.width}x{image.height} ({image.depth}bpc)")
