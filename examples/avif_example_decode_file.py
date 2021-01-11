@@ -22,8 +22,12 @@ def main():
         lib.avifRGBImageAllocatePixels(rgb)
         lib.avifImageYUVToRGB(image, rgb)
 
-        first_pixel = tuple(rgb.pixels[0:4])
-        print(f" * First pixel: RGBA{first_pixel}\n")
+        pixels = rgb.pixels
+        if rgb.depth > 8:
+            pixels = ffi.cast("uint16_t *", pixels)
+
+        first_pixel = tuple(pixels[0:4])
+        print(f" * First pixel: RGBA{first_pixel}")
 
 
 if __name__ == "__main__":
