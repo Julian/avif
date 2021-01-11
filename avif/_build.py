@@ -23,6 +23,10 @@ ffi.cdef(
 
     typedef struct {
         avifImage * image;
+
+        int imageIndex;                // 0-based
+        int imageCount;                // Always 1 for non-sequences
+
         ...;
     } avifDecoder;
 
