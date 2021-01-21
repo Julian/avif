@@ -110,7 +110,7 @@ Linux
      Now you can import module from python to check if module imports correctly.
 
      .. code-block:: python
-     
+
         >>> import avif
         >>>
 

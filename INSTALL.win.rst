@@ -36,7 +36,7 @@ Windows
 
 
 - **Build Steps:**
-  
+
   **1.** Open the Native Tools Command Prompt for VS 2019
 
     It will open command line window but from it you will be able to compile code.
@@ -119,7 +119,7 @@ Windows
   **13.** You should now be able to import the library without any errors!
 
       .. code-block:: python
-      
+
          >>> import avif
          >>>
 
