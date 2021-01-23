@@ -3,7 +3,7 @@ Windows
 =======
 
 
-  tested on Windows 8.1 and Windows 10 1809 (both amd64)
+  Tested on Windows 8.1 and Windows 10 1809 (both amd64)
 
 
 Build Requirements
@@ -17,8 +17,9 @@ Build Requirements
 - python (3.7+)
 - pip
 
-**Ensure that every requirement is in path and Windows can find it:**
-::
+**Ensure that every requirement is on the system path and Windows can find it:**
+
+.. code-block:: sh
 
   > where cmake
   C:\Program Files\CMake\bin\cmake.exe
@@ -124,6 +125,5 @@ Build Steps
     .. code-block:: python
 
       >>> import avif
-      >>>
 
-    Now you can run `examples <README.rst#Examples>`_
+   You can also run the `examples <README.rst#Examples>`_.
