@@ -24,7 +24,9 @@ Python bindings for `libavif <https://github.com/AOMediaCodec/libavif>`_ (via
 Installation
 ------------
 
-To install this module you will need to compile libavif yourself. If you want to make use of the decoder you will also need to compile one (decoders/encoders can be compiled with libavif).
+To install this module you will need to compile ``libavif`` yourself. If
+you want to make use of the decoder you will also need to compile one
+(decoders/encoders can be compiled with ``libavif``).
 
 
 **List of available AV1 decoders:**
@@ -35,12 +37,16 @@ To install this module you will need to compile libavif yourself. If you want to
 - rav1e
 - svt
 
-If you compile avif without an AV1 decoder you will get ``AVIFError: No codec available`` raised when you try to get a result, but you will still be able to import python module.
+If you compile ``avif`` without an AV1 decoder you will get
+``AVIFError: No codec available`` raised when you try to get a result,
+but you will still be able to import python module.
 
-The installation steps show how to compile libavif with aom decoder.
+The installation steps show how to compile ``libavif`` with the ``aom``
+decoder.
 
 
-**Installation steps:**
+Platform-Specific Steps
+^^^^^^^^^^^^^^^^^^^^^^^
 
 - `Linux <INSTALL.linux.rst>`_
 - `Windows <INSTALL.win.rst>`_
@@ -49,17 +55,18 @@ The installation steps show how to compile libavif with aom decoder.
 Examples
 --------
 
-Examples can be found under `examples <https://github.com/Julian/avif/tree/main/examples>`_ directory.
+Examples can be found under `examples
+<https://github.com/Julian/avif/tree/main/examples>`_ directory.
 
-You can use ``sample.avif`` if you don't have any avif encoded image for testing.
-Sample is 128x128 pixels in size and it's all white *(RGBA: 255, 255, 255, 255)*.
+You can use ``sample.avif`` if you don't have any avif encoded image
+for testing.  Sample is 128x128 pixels in size and it's all white
+*(RGBA: 255, 255, 255, 255)*.
 
-To test if library works properly run:
+To test if library works properly you can run:
 
 .. code-block:: bash
 
-   cd examples
-   python avif_example_decode_file.py sample.avif
+   python3 examples/avif_example_decode_file.py examples/sample.avif
 
 Correct output::
 
