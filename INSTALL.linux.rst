@@ -9,17 +9,24 @@ Linux
 Build Requirements
 ------------------
 
-- cmake
-- make
-- ninja
-- gcc
-- g++
-- nasm
-- git
-- sudo
-- python (3.7+)
-- python development (python3-dev or python3-devel)
-- pip
+- **libavif**:
+
+  - cmake
+  - make
+  - ninja
+  - gcc
+  - g++
+  - nasm
+  - git
+  - sudo
+
+- **Python module**:
+
+  - python (3.7+)
+  - python development (python3-dev or python3-devel)
+  - pip
+  - patchelf
+  - unzip
 
 
 Arch
@@ -28,7 +35,7 @@ Arch
 .. code-block:: sh
 
   sudo pacman -Sy
-  sudo pacman -S cmake make ninja gcc nasm git python3 python-pip
+  sudo pacman -S cmake make ninja gcc nasm git python3 python-pip patchelf unzip
 
 
 Fedora
@@ -37,7 +44,7 @@ Fedora
 .. code-block:: sh
 
   sudo dnf update
-  sudo dnf install cmake make ninja-build gcc g++ nasm git python3-devel python3-pip
+  sudo dnf install cmake make ninja-build gcc g++ nasm git python3-devel python3-pip patchelf unzip
 
 
 Ubuntu
@@ -46,17 +53,14 @@ Ubuntu
 .. code-block:: sh
 
   sudo apt-get update
-  sudo apt-get install cmake make ninja-build gcc g++ nasm git python3-dev python3-pip
+  sudo apt-get install cmake make ninja-build gcc g++ nasm git python3-dev python3-pip patchelf unzip
 
 
 Build Steps
 -----------
 
-#. Install cffi module from pypi:
-
-   - ``sudo pip3 install --upgrade cffi``
-
-   This will allow to compile bindings
+  **Warning:**
+  The build steps are tested only on amd64 (x86_64) architecture.
 
 
 #. Create a folder just to have everything in the same place:
@@ -79,8 +83,11 @@ Build Steps
 
    Edit the ``libavif/ext/aom.cmd`` script:
 
-   - Add ``-DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=1`` after ``cmake -G Ninja -DCMAKE_BUILD_TYPE=Release`` and keep rest of the line as is
-   - Add the line that says ``sudo ninja install`` below the line with ``ninja``
+   - Add ``-DBUILD_SHARED_LIBS=1`` after ``cmake -G Ninja -DCMAKE_BUILD_TYPE=Release`` and keep rest of the line as is
+
+   Alternatively if you don't want to leave your terminal, you can type this to update the file from command line:
+
+   - ``sed -i 's/-DCMAKE_BUILD_TYPE=Release/& -DBUILD_SHARED_LIBS=1/' libavif/ext/aom.cmd``
 
 
 #. Execute the script from the terminal:
@@ -89,27 +96,53 @@ Build Steps
    - ``sh aom.cmd``
    - ``cd ..``
 
-   After compilation step you will probably be prompted to type root password to install aom libraries to your system
+   After compilation step you will probably be prompted to type root password to install aom libraries to your system.
 
 
 #. After all of this you can compile libavif with AOM support:
 
    - Ensure that you are in the main libavif directory (``echo $PWD`` should give ``~/python-avif/libavif``)
    - ``cd cmake``
-   - ``cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DAVIF_CODEC_AOM=ON``
+   - ``cmake .. -DAVIF_LOCAL_AOM=ON -DAVIF_CODEC_AOM=ON``
    - ``make -j`nproc```
    - ``sudo make install``
 
-   The ``-DCMAKE_INSTALL_PREFIX=/usr`` is optional, but without it you will almost certainly need to provide ``LD_LIBRARY_PATH=/usr/local/lib`` as an environment variable in order to use the library.
+   It will install libavif to ``/usr/local/``.
 
    ``-j`nproc``` means that the compiler will use all CPU threads to compile. If you want to change it and use for example 2 threads, you can provide `-j2` instead.
 
 
-#. If build succeeded, you can finally install this module from python:
+#. On the python side install ``auditwheel`` module:
+
+   - ``pip install --user auditwheel``
+
+   This is optional, but if the shell is telling you that it couldn't find ``pip`` or ``python``
+   (or if you have Python 2.x also installed), you should make some temporary aliases:
+
+   - ``alias pip=pip3``
+   - ``alias python=python3``
+
+
+#. Build wheel for this package:
 
    - ``cd ~/python-avif/avif``
-   - ``python setup.py build``
-   - ``sudo python setup.py install``
+   - ``pip wheel .``
+
+
+#. Now you shoud see ``.whl`` file created by pip.
+
+   If it exists, you should run ``auditwheel`` on it to add ``libavif`` that you've compiled before to the wheel.
+
+   - ``export LD_LIBRARY_PATH=/usr/local/lib``
+   - ``python -m auditwheel repair --plat linux_x86_64 avif-*-linux_x86_64.whl``
+
+   On some distributions, you may need to set ``LD_LIBRARY_PATH`` to ``/usr/local/lib64`` instead
+
+
+#. The ``auditwheel`` binary should create folder named ``wheelhouse`` and put your final wheel there.
+
+   - ``cd wheelhouse``
+   - ``pip install --user avif-*-linux_x86_64.whl``
 
 
 #. And that should be it!

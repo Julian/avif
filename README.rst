@@ -21,27 +21,34 @@ Python bindings for `libavif <https://github.com/AOMediaCodec/libavif>`_ (via
 `CFFI <https://cffi.readthedocs.io/en/latest/>`_)
 
 
-Installation
-------------
+Installation from PyPI
+----------------------
 
-To install this module you will need to compile ``libavif`` yourself. If
-you want to make use of the decoder you will also need to compile one
-(decoders/encoders can be compiled with ``libavif``).
+``pip install avif``
+
+
+Installation from source
+------------------------
+
+
+To install this module from source you will need to compile ``libavif`` yourself.
+If you want to make use of the decoder you will also need to compile one
+(decoders/encoders can be compiled from ``libavif``).
 
 
 **List of available AV1 decoders:**
 
-- **aom** (recommended)
-- dav1d
-- libgav1
-- rav1e
-- svt
+- `aom <https://aomedia.googlesource.com/aom>`_ (recommended)
+- `dav1d <https://code.videolan.org/videolan/dav1d>`_
+- `libgav1 <https://chromium.googlesource.com/codecs/libgav1>`_
+- `rav1e <https://github.com/xiph/rav1e>`_
+- `svt <https://github.com/AOMediaCodec/SVT-AV1>`_
 
 If you compile ``avif`` without an AV1 decoder you will get
 ``AVIFError: No codec available`` raised when you try to get a result,
 but you will still be able to import python module.
 
-The installation steps show how to compile ``libavif`` with the ``aom``
+The installation steps below show how to compile ``libavif`` with the ``aom``
 decoder.
 
 
