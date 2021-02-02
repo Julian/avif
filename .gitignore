@@ -1,1 +1,11 @@
+__pycache__/
+wheelhouse/
+.tox/
+build/
+avif.egg-info/
+
 _avif.c
+build.sh
+
+*.py[cod]
+*.whl

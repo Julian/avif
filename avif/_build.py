@@ -60,6 +60,7 @@ ffi.cdef(
     avifResult avifDecoderSetIOFile(avifDecoder * decoder, const char * filename);
     avifResult avifDecoderParse(avifDecoder * decoder);
     avifResult avifDecoderNextImage(avifDecoder * decoder);
+    avifResult avifDecoderNthImage(avifDecoder * decoder, uint32_t frameIndex);
     """,
 )
 
