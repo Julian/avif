@@ -1,12 +1,12 @@
 """
 Pillow plugin for decoding animated and static avif files. (only 8bit)
-Based on: https://github.com/python-pillow/Pillow/blob/master/src/PIL/WebPImagePlugin.py
+Based on:
+https://github.com/python-pillow/Pillow/blob/master/src/PIL/WebPImagePlugin.py
 """
 
 from io import BytesIO
 
 from PIL import Image, ImageFile
-import cffi
 
 from _avif import ffi, lib
 from avif import Decoder
@@ -42,15 +42,13 @@ class AvifImageFile(ImageFile.ImageFile):
 
         self.n_frames = self._avif_decoder._decoder.imageCount
         self.is_animated = bool(self.n_frames > 1)
-        self.mode = 'RGBA' # only RGBA for now
+        self.mode = 'RGBA'  # only RGBA for now
         self.rawmode = self.mode
         self.tile = []
-
 
     def seek(self, n):
 
         self._seek_to_frame = n
-
 
     def _get_frame(self):
 
@@ -60,10 +58,11 @@ class AvifImageFile(ImageFile.ImageFile):
         lib.avifRGBImageAllocatePixels(self._rgb_plane)
         lib.avifImageYUVToRGB(self.avif_image, self._rgb_plane)
 
-        data = bytes(ffi.unpack(self._rgb_plane.pixels, self._size[0]*self._size[1]*4))
+        data = bytes(
+            ffi.unpack(self._rgb_plane.pixels, self._size[0]*self._size[1]*4)
+        )
 
         return data
-
 
     def load(self):
 
