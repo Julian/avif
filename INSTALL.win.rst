@@ -102,10 +102,11 @@ Build Steps
    - ``xcopy "C:\Program Files (x86)\libavif\lib\avif.lib" .``
 
 
-#. Now you can run the ``setup.py`` script:
+#. Now you can install the ``avif`` Python package:
 
-   - ``python setup.py build``
-   - ``python setup.py install``
+   .. code-block:: sh
+
+       $ python -m pip install .
 
 
 #. In order to import the library you should copy ``avif.dll`` (that you can find in ``C:\Program Files (x86)\libavif\bin``) to the installed module directory. You can use ``pip show avif`` to know where the module is installed.

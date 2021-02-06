@@ -24,7 +24,13 @@ Python bindings for `libavif <https://github.com/AOMediaCodec/libavif>`_ (via
 Installation from PyPI
 ----------------------
 
-``pip install avif``
+``avif`` is available `via PyPI <https://pypi.org/project/avif/>`_, with
+wheels built for many common platforms. It can be installed via your
+favorite Python package manager, e.g.:
+
+.. code-block:: sh
+
+    $ pip install avif
 
 
 Installation from source
