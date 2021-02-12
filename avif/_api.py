@@ -48,15 +48,13 @@ class Decoder:
     def next_images(self):
         while True:
             res = lib.avifDecoderNextImage(self._decoder)
-            if res != lib.AVIF_RESULT_OK:
+            if res == lib.AVIF_RESULT_NO_IMAGES_REMAINING:
                 break
+            _succeed(res)
             yield self._decoder.image
 
     def nth_image(self, n):
 
-        res = lib.avifDecoderNthImage(self._decoder, n)
-
-        if res != lib.AVIF_RESULT_OK:
-            raise AVIFError("Result not OK: {}".format(res))
+        _succeed(lib.avifDecoderNthImage(self._decoder, n))
 
         return self._decoder.image
