@@ -106,4 +106,3 @@ Correct output:
 
     Parsed AVIF: 128x128 (Mode: RGBA)
     * First pixel: RGBA(255, 255, 255, 255)
-
