@@ -3,6 +3,7 @@ wheelhouse/
 .tox/
 build/
 avif.egg-info/
+.vscode/
 
 _avif.c
 build.sh

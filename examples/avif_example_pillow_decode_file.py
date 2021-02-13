@@ -8,7 +8,7 @@ import sys
 from PIL import Image
 
 # activates avif support in Pillow
-from avif.plugins import AvifImagePlugin
+import avif.pillow
 
 
 def main():

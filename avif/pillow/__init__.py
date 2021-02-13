@@ -41,7 +41,7 @@ class AvifImageFile(ImageFile.ImageFile):
         self._size = (self.avif_image.width, self.avif_image.height)
 
         self.n_frames = self._avif_decoder._decoder.imageCount
-        self.is_animated = bool(self.n_frames > 1)
+        self.is_animated = self.n_frames > 1
         self.mode = 'RGBA'  # only RGBA for now
         self.rawmode = self.mode
         self.tile = []
