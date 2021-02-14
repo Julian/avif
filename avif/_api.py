@@ -40,6 +40,21 @@ class Decoder:
         _succeed(lib.avifDecoderParse(self._decoder))
         return self._decoder.image
 
+    def parse_data(self, data):
+        _succeed(lib.avifDecoderSetIOMemory(self._decoder, data, len(data)))
+        _succeed(lib.avifDecoderParse(self._decoder))
+        return self._decoder.image
+
     def next_images(self):
-        while lib.avifDecoderNextImage(self._decoder) == lib.AVIF_RESULT_OK:
+        while True:
+            res = lib.avifDecoderNextImage(self._decoder)
+            if res == lib.AVIF_RESULT_NO_IMAGES_REMAINING:
+                break
+            _succeed(res)
             yield self._decoder.image
+
+    def nth_image(self, n):
+
+        _succeed(lib.avifDecoderNthImage(self._decoder, n))
+
+        return self._decoder.image

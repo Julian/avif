@@ -32,6 +32,12 @@ favorite Python package manager, e.g.:
 
     $ pip install avif
 
+Or if you want to use `Pillow <https://github.com/python-pillow/Pillow>`_ integration:
+
+.. code-block:: sh
+
+    $ pip install avif[pillow]
+
 
 Installation from source
 ------------------------
@@ -75,13 +81,28 @@ You can use ``sample.avif`` if you don't have any avif encoded image
 for testing.  Sample is 128x128 pixels in size and it's all white
 *(RGBA: 255, 255, 255, 255)*.
 
-To test if library works properly you can run:
+**To test if library works properly you can run:**
 
 .. code-block:: bash
 
-   python3 examples/avif_example_decode_file.py examples/sample.avif
+    $ python examples/avif_example_decode_file.py examples/sample.avif
 
-Correct output::
+Correct output:
 
-   Parsed AVIF: 128x128 (8bpc)
-   * First pixel: RGBA(255, 255, 255, 255)
+.. code-block:: bash
+
+    Parsed AVIF: 128x128 (8bpc)
+    * First pixel: RGBA(255, 255, 255, 255)
+
+**Or to test Pillow plugin:**
+
+.. code-block:: bash
+
+    $ python examples/avif_example_pillow_decode_file.py examples/sample.avif
+
+Correct output:
+
+.. code-block:: bash
+
+    Parsed AVIF: 128x128 (Mode: RGBA)
+    * First pixel: RGBA(255, 255, 255, 255)
