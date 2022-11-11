@@ -1,5 +1,6 @@
 """
-This example aims to be similar to ``avif_example_decode_file.py`` but it uses Pillow module.
+A Pillow-using example similar to ``avif_example_decode_file.py``.
+
 Current limitation is Pillow not supporting 10 and 12 bit modes.
 """
 
@@ -8,7 +9,7 @@ import sys
 from PIL import Image
 
 # activates avif support in Pillow
-import avif.pillow
+import avif.pillow  # noqa: F401
 
 
 def main():
@@ -29,5 +30,5 @@ def main():
         print(f" * First pixel: RGBA{first_pixel}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
