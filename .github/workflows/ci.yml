@@ -44,7 +44,7 @@ jobs:
         uses: wntrblm/nox@2022.8.7
       - name: Install libavif
         run: >
-          curl -L 'https://github.com/AOMediaCodec/libavif/archive/v0.8.4.tar.gz' | tar xzf - &&
+          curl -L 'https://github.com/AOMediaCodec/libavif/archive/v0.11.1.tar.gz' | tar xzf - &&
           cd libavif* &&
           mkdir build && cd build &&
           cmake .. &&
