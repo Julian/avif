@@ -19,12 +19,29 @@ jobs:
           python-version: "3.11"
       - uses: pre-commit/action@v3.0.0
 
+  list:
+    runs-on: ubuntu-latest
+    outputs:
+      images: ${{ steps.images-matrix.outputs.noxenvs }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: images-matrix
+        run: |
+          echo >>$GITHUB_OUTPUT noxenvs=$(
+            nox --list-sessions |
+            grep '^* ' |
+            cut -d ' ' -f 2- |
+            jq --raw-input --slurp 'split("\n") | map(select(. != ""))'
+          )
+
   ci:
+    needs: list
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest]
+        noxenv: ${{ fromJson(needs.list.outputs.noxenvs) }}
 
     steps:
       - uses: actions/checkout@v3
@@ -51,9 +68,9 @@ jobs:
           make -j $(($(nproc) + 1)) &&
           sudo make install
       - name: Add /usr/local/lib to LD_LIBRARY_PATH
-        run: echo 'LD_LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
+        run: echo 'LD_LIBRARY_PATH=/usr/local/lib' >>$GITHUB_ENV
       - name: Run nox
-        run: nox
+        run: nox -s ${{ matrix.noxenv }}
 
   packaging:
     needs: ci
