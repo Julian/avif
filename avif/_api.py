@@ -54,7 +54,6 @@ class Decoder:
             yield self._decoder.image
 
     def nth_image(self, n):
-
         _succeed(lib.avifDecoderNthImage(self._decoder, n))
 
         return self._decoder.image

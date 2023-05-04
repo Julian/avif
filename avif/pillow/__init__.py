@@ -13,14 +13,12 @@ from avif import Decoder
 
 
 def _accept(data):
-
     possible_ftyp = (b"avif", b"avis", b"mif1")
 
     return data[4:8] == b"ftyp" and data[8:12] in possible_ftyp
 
 
 class AvifImageFile(ImageFile.ImageFile):
-
     format = "AVIF"
     format_description = "Image container for AV1 video frames"
 
@@ -28,7 +26,6 @@ class AvifImageFile(ImageFile.ImageFile):
     _seek_to_frame = 0
 
     def _open(self):
-
         self._rgb_plane = ffi.new("avifRGBImage*")
         self._avif_decoder = Decoder()
         self.fc = self.fp.read()
@@ -47,11 +44,9 @@ class AvifImageFile(ImageFile.ImageFile):
         self.tile = []
 
     def seek(self, n):
-
         self._seek_to_frame = n
 
     def _get_frame(self):
-
         self.avif_image = self._avif_decoder.nth_image(self._current_frame)
 
         lib.avifRGBImageSetDefaults(self._rgb_plane, self.avif_image)
@@ -68,9 +63,7 @@ class AvifImageFile(ImageFile.ImageFile):
         return data
 
     def load(self):
-
         if self._current_frame != self._seek_to_frame:
-
             self._current_frame = self._seek_to_frame
 
             data = self._get_frame()
