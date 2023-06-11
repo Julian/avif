@@ -1,8 +1,5 @@
 def test_it_imports():
-    import _avif
-
-    _avif
-
     from avif import Decoder
+    import _avif  # noqa: F401
 
     Decoder()

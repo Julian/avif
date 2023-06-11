@@ -1,4 +1,6 @@
 from pathlib import Path
+from tempfile import TemporaryDirectory
+import os
 
 import nox
 
@@ -21,42 +23,47 @@ def session(default=True, **kwargs):
 
 @session(python=["3.8", "3.9", "3.10", "3.11", "pypy3"])
 def tests(session):
-    session.install(str(ROOT), "pytest")
-    session.run("pytest")
+    session.install(ROOT, "pytest")
+
+    if session.posargs and session.posargs[0] == "coverage":
+        if len(session.posargs) > 1 and session.posargs[1] == "github":
+            github = os.environ["GITHUB_STEP_SUMMARY"]
+        else:
+            github = None
+
+        session.install("coverage[toml]")
+        session.run("coverage", "run", "-m", "pytest", AVIF)
+        if github is None:
+            session.run("coverage", "report")
+        else:
+            with open(github, "a") as summary:
+                summary.write("### Coverage\n\n")
+                summary.flush()  # without a flush, output seems out of order.
+                session.run(
+                    "coverage",
+                    "report",
+                    "--format=markdown",
+                    stdout=summary,
+                )
+    else:
+        session.run("pytest", *session.posargs, AVIF)
+
+
+@session()
+def audit(session):
+    session.install("pip-audit", ROOT)
+    session.run("python", "-m", "pip_audit")
 
 
 @session(tags=["build"])
 def build(session):
-    session.install("build")
-    tmpdir = session.create_tmp()
-    session.run("python", "-m", "build", str(ROOT), "--outdir", tmpdir)
-
-
-@session(tags=["style"])
-def readme(session):
     session.install("build", "twine")
-    tmpdir = session.create_tmp()
-    session.run("python", "-m", "build", str(ROOT), "--outdir", tmpdir)
-    session.run("python", "-m", "twine", "check", tmpdir + "/*")
+    with TemporaryDirectory() as tmpdir:
+        session.run("python", "-m", "build", ROOT, "--outdir", tmpdir)
+        session.run("twine", "check", "--strict", tmpdir + "/*")
 
 
 @session(tags=["style"])
 def style(session):
-    session.install(
-        "flake8",
-        "flake8-broken-line",
-        "flake8-bugbear",
-        "flake8-commas",
-        "flake8-quotes",
-        "flake8-tidy-imports",
-    )
-    session.run(
-        "python",
-        "-m",
-        "flake8",
-        "--config",
-        str(ROOT / ".flake8"),
-        str(EXAMPLES),
-        str(AVIF),
-        __file__,
-    )
+    session.install("ruff")
+    session.run("ruff", "check", ROOT)

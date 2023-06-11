@@ -8,7 +8,7 @@ from _avif import ffi, lib
 from avif import Decoder
 
 
-def main():
+def main() -> None:
     filename = sys.argv[1]
 
     rgb = ffi.new("avifRGBImage*")

@@ -1,1 +1,6 @@
-from avif._api import AVIFError, Decoder  # noqa: F401
+"""
+Python bindings for libavif.
+"""
+from avif._api import AVIFError, Decoder
+
+__all__ = ["AVIFError", "Decoder"]

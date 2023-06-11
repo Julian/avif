@@ -1,5 +1,8 @@
 """
-Pillow plugin for decoding animated and static avif files. (only 8bit)
+Pillow plugin for decoding animated and static avif files.
+
+Only 8-bit files are currently supported.
+
 Based on:
 https://github.com/python-pillow/Pillow/blob/master/src/PIL/WebPImagePlugin.py
 """
@@ -12,13 +15,17 @@ from _avif import ffi, lib
 from avif import Decoder
 
 
-def _accept(data):
+def _accept(data: bytes):
     possible_ftyp = (b"avif", b"avis", b"mif1")
 
     return data[4:8] == b"ftyp" and data[8:12] in possible_ftyp
 
 
 class AvifImageFile(ImageFile.ImageFile):
+    """
+    A Pillow ImageFile for AVIF.
+    """
+
     format = "AVIF"
     format_description = "Image container for AV1 video frames"
 
@@ -43,7 +50,10 @@ class AvifImageFile(ImageFile.ImageFile):
         self.rawmode = self.mode
         self.tile = []
 
-    def seek(self, n):
+    def seek(self, n: int) -> None:
+        """
+        Seek!
+        """
         self._seek_to_frame = n
 
     def _get_frame(self):
@@ -62,7 +72,10 @@ class AvifImageFile(ImageFile.ImageFile):
 
         return data
 
-    def load(self):
+    def load(self) -> Image.PixelAccess:
+        """
+        Load!
+        """
         if self._current_frame != self._seek_to_frame:
             self._current_frame = self._seek_to_frame
 

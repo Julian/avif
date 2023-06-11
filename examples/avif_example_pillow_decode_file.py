@@ -12,7 +12,7 @@ from PIL import Image
 import avif.pillow  # noqa: F401
 
 
-def main():
+def main() -> None:
     filename = sys.argv[1]
 
     image = Image.open(filename)
