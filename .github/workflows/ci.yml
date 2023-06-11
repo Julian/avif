@@ -50,7 +50,8 @@ jobs:
         noxenv: ${{ fromJson(needs.list.outputs.noxenvs) }}
         posargs: [""]
         include:
-          - noxenv: tests-3.11
+          - os: ubuntu-latest
+            noxenv: tests-3.11
             posargs: coverage github
 
     steps:
