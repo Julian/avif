@@ -48,6 +48,10 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest]
         noxenv: ${{ fromJson(needs.list.outputs.noxenvs) }}
+        posargs: [""]
+        include:
+          - noxenv: tests-3.11
+            posargs: coverage github
 
     steps:
       - uses: actions/checkout@v3
@@ -74,7 +78,7 @@ jobs:
       - name: Add /usr/local/lib to LD_LIBRARY_PATH
         run: echo 'LD_LIBRARY_PATH=/usr/local/lib' >>$GITHUB_ENV
       - name: Run nox
-        run: nox -s "${{ matrix.noxenv }}"
+        run: nox -s "${{ matrix.noxenv }}" -- ${{ matrix.posargs }}
 
   packaging:
     needs: ci
@@ -99,8 +103,6 @@ jobs:
       - name: Publish to PyPI
         if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.pypi_password }}
       - name: Create a Release
         if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
         uses: softprops/action-gh-release@v1
