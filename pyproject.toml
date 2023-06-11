@@ -71,6 +71,7 @@ ignore = [
   # We support 3.8 + 3.9
   "UP007",
 ]
+extend-exclude = ["libavif"]
 
 [tool.ruff.flake8-quotes]
 docstring-quotes = "double"
