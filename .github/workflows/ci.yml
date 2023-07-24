@@ -78,6 +78,8 @@ jobs:
           sudo make install
       - name: Add /usr/local/lib to LD_LIBRARY_PATH
         run: echo 'LD_LIBRARY_PATH=/usr/local/lib' >>$GITHUB_ENV
+      - name: Add /usr/local/lib to DYLD_LIBRARY_PATH
+        run: echo 'DYLD_LIBRARY_PATH=/usr/local/lib' >>$GITHUB_ENV
       - name: Run nox
         run: nox -s "${{ matrix.noxenv }}" -- ${{ matrix.posargs }}
 
