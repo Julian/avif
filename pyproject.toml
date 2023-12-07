@@ -13,7 +13,7 @@ skip_covered = false
 
 [tool.coverage.run]
 branch = true
-source = ["referencing"]
+source = ["avif"]
 dynamic_context = "test_function"
 
 [tool.coverage.report]
