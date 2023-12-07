@@ -12,6 +12,10 @@ EXAMPLES = ROOT / "examples"
 nox.options.sessions = []
 
 
+SUPPORTED = ["3.10", "3.11", "3.12", "pypy3.10"]
+LATEST = "3.12"
+
+
 def session(default=True, **kwargs):  # noqa: D103
     def _session(fn):
         if default:
@@ -21,7 +25,7 @@ def session(default=True, **kwargs):  # noqa: D103
     return _session
 
 
-@session(python=["3.8", "3.9", "3.10", "3.11", "pypy3"])
+@session(python=SUPPORTED)
 def tests(session):
     """
     Run the test suite with a corresponding Python version.
