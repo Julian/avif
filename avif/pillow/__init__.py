@@ -85,7 +85,7 @@ class AvifImageFile(ImageFile.ImageFile):
                 self.fp.close()
             self.fp = BytesIO(data)
 
-            self.tile = [("raw", (0, 0) + self.size, 0, self.rawmode)]
+            self.tile = [("raw", (0, 0, *self.size), 0, self.rawmode)]
 
             return super().load()
 
