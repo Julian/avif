@@ -39,7 +39,7 @@ class AvifImageFile(ImageFile.ImageFile):
 
         self.avif_image = self._avif_decoder.parse_data(self.fc)
 
-        if self.avif_image.depth != 8:
+        if self.avif_image.depth != 8:  # noqa: PLR2004
             raise NotImplementedError("Image depth is not 8 bits.")
 
         self._size = (self.avif_image.width, self.avif_image.height)
@@ -63,14 +63,12 @@ class AvifImageFile(ImageFile.ImageFile):
         lib.avifRGBImageAllocatePixels(self._rgb_plane)
         lib.avifImageYUVToRGB(self.avif_image, self._rgb_plane)
 
-        data = bytes(
+        return bytes(
             ffi.unpack(
                 self._rgb_plane.pixels,
                 self._size[0] * self._size[1] * 4,
             ),
         )
-
-        return data
 
     def load(self) -> Image.PixelAccess:
         """
