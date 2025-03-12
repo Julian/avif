@@ -2,44 +2,37 @@ name: CI
 
 on:
   push:
+    branches-ignore:
+      - "wip*"
+    tags:
+      - "v*"
   pull_request:
-  release:
-    types: [published]
   schedule:
     # Daily at 9:21
     - cron: "21 9 * * *"
-
-env:
-  PIP_DISABLE_PIP_VERSION_CHECK: "1"
-  PIP_NO_PYTHON_VERSION_WARNING: "1"
+  workflow_dispatch:
 
 jobs:
-  pre-commit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-      - uses: pre-commit/action@v3.0.1
-
   list:
     runs-on: ubuntu-latest
     outputs:
       noxenvs: ${{ steps.noxenvs-matrix.outputs.noxenvs }}
     steps:
       - uses: actions/checkout@v4
-      - name: Set up nox
-        uses: wntrblm/nox@2025.02.09
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
       - id: noxenvs-matrix
         run: |
           echo >>$GITHUB_OUTPUT noxenvs=$(
-            nox --list-sessions --json | jq '[.[].session]'
+            uvx nox --list-sessions --json | jq '[.[].session]'
           )
 
   ci:
     needs: list
     runs-on: ${{ matrix.os }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -48,7 +41,7 @@ jobs:
         posargs: [""]
         include:
           - os: ubuntu-latest
-            noxenv: tests-3.11
+            noxenv: tests-3.13
             posargs: coverage github
 
     steps:
@@ -63,13 +56,17 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: |
-            3.10
             3.11
             3.12
+            3.13
             pypy3.10
           allow-prereleases: true
-      - name: Set up nox
-        uses: wntrblm/nox@2025.02.09
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
       - name: Install libavif
         run: >
           curl -L 'https://github.com/AOMediaCodec/libavif/archive/v0.11.1.tar.gz' | tar xzf - &&
@@ -80,8 +77,9 @@ jobs:
           sudo make install
       - name: Add /usr/local/lib to LD_LIBRARY_PATH
         run: echo 'LD_LIBRARY_PATH=/usr/local/lib' >>$GITHUB_ENV
+
       - name: Run nox
-        run: nox -s "${{ matrix.noxenv }}" -- ${{ matrix.posargs }}
+        run: uvx nox -s "${{ matrix.noxenv }}" -- ${{ matrix.posargs }}
 
   packaging:
     needs: ci
@@ -89,6 +87,7 @@ jobs:
     environment:
       name: PyPI
       url: https://pypi.org/p/avif
+
     permissions:
       contents: write
       id-token: write
@@ -103,14 +102,15 @@ jobs:
           cmake .. &&
           make -j $(($(nproc) + 1)) &&
           sudo make install
-      - name: Set up Python
-        uses: actions/setup-python@v5
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
         with:
-          python-version: "3.x"
-      - name: Install dependencies
-        run: python -m pip install build
-      - name: Create packages
-        run: python -m build .
+          enable-cache: true
+
+      - name: Build our distributions
+        run: uv run --frozen --with 'build[uv]' -m build --installer=uv
+
       - name: Publish to PyPI
         if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@release/v1
