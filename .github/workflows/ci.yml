@@ -75,7 +75,11 @@ jobs:
           cmake .. &&
           make -j $(($(nproc) + 1)) &&
           sudo make install
-      - name: Add /usr/local/lib to LD_LIBRARY_PATH
+      - name: Add /usr/local/lib to DYLD_LIBRARY_PATH on macOS
+        if: runner.os == 'macOS'
+        run: echo 'DYLD_LIBRARY_PATH=/usr/local/lib' >>$GITHUB_ENV
+      - name: Add /usr/local/lib to LD_LIBRARY_PATH on Linux
+        if: runner.os == 'Linux'
         run: echo 'LD_LIBRARY_PATH=/usr/local/lib' >>$GITHUB_ENV
 
       - name: Run nox
