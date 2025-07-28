@@ -7,6 +7,45 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "avif"
+description = "Python bindings for libavif"
+requires-python = ">=3.10"
+readme = "README.rst"
+license = "MIT"
+license-files = ["COPYING"]
+keywords = ["video"]
+authors = [
+  { name = "Julian Berman", email = "Julian+avif@GrayVines.com" }
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dynamic = ["version"]
+dependencies = [
+  "attrs",
+  "cffi>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Julian/avif"
+Issues = "https://github.com/Julian/avif/issues/"
+Source = "https://github.com/Julian/avif"
+
+[project.optional-dependencies]
+pillow = ["Pillow"]
+
+[tool.setuptools.packages.find]
+
 [tool.coverage.html]
 show_contexts = true
 skip_covered = false
