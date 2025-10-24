@@ -8,7 +8,7 @@ ROOT = Path(__file__).parent
 AVIF = ROOT / "avif"
 EXAMPLES = ROOT / "examples"
 
-SUPPORTED = ["pypy3.10", "3.11", "3.12", "3.13"]
+SUPPORTED = ["pypy3.11", "3.11", "3.12", "3.13", "3.14"]
 LATEST = SUPPORTED[-1]
 
 nox.options.default_venv_backend = "uv|virtualenv"
