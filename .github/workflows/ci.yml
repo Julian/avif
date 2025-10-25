@@ -41,7 +41,7 @@ jobs:
         posargs: [""]
         include:
           - os: ubuntu-latest
-          - noxenv: tests-3.14
+            noxenv: tests-3.14
             posargs: coverage github
 
     steps:
