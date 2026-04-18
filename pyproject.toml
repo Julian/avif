@@ -79,14 +79,14 @@ enable = ["pypy"]
 [tool.cibuildwheel.linux]
 archs = ["x86_64", "i686", "aarch64", "ppc64le", "s390x", "armv7l"]
 before-all = [
-    "curl -fL --retry 3 https://github.com/AOMediaCodec/libavif/archive/v0.11.1.tar.gz | tar xzf -",
+    "tar xzf {project}/libavif-0.11.1.tar.gz",
     "cd libavif-0.11.1 && cmake -S . -B build -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON && cmake --build build --parallel && cmake --install build",
 ]
 
 [tool.cibuildwheel.macos]
 archs = ["x86_64", "arm64"]
 before-all = [
-    "curl -fL --retry 3 https://github.com/AOMediaCodec/libavif/archive/v0.11.1.tar.gz | tar xzf -",
+    "tar xzf {project}/libavif-0.11.1.tar.gz",
     "cd libavif-0.11.1 && cmake -S . -B build -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES='arm64;x86_64' -DCMAKE_INSTALL_PREFIX=/tmp/libavif && cmake --build build --parallel && cmake --install build",
 ]
 environment = { CFLAGS = "-I/tmp/libavif/include", LDFLAGS = "-L/tmp/libavif/lib" }
