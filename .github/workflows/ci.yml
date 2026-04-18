@@ -140,7 +140,7 @@ jobs:
           enable-cache: true
 
       - name: Build sdist
-        run: uv run --frozen --with 'build[uv]' -m build --sdist --installer=uv
+        run: uvx --from 'build[uv]' pyproject-build --sdist --installer=uv
 
       - uses: actions/download-artifact@v4
         with:
