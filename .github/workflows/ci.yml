@@ -90,13 +90,16 @@ jobs:
     needs: ci
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: pypa/cibuildwheel@v2
+      - uses: docker/setup-qemu-action@v3
+        if: runner.os == 'Linux'
+      - uses: pypa/cibuildwheel@v3
       - uses: actions/upload-artifact@v4
         with:
           name: wheels-${{ matrix.os }}

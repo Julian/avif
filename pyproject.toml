@@ -73,16 +73,21 @@ ignore = [
 
 [tool.cibuildwheel]
 build = "cp311-* cp312-* cp313-* cp314-* pp311-*"
+
+[tool.cibuildwheel.linux]
+archs = ["x86_64", "i686", "aarch64", "ppc64le", "s390x", "armv7l"]
 before-all = [
     "curl -L https://github.com/AOMediaCodec/libavif/archive/v0.11.1.tar.gz | tar xzf -",
     "cd libavif-0.11.1 && cmake -S . -B build -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON && cmake --build build --parallel && cmake --install build",
 ]
 
-[tool.cibuildwheel.linux]
-archs = ["x86_64"]
-
 [tool.cibuildwheel.macos]
-archs = ["arm64"]
+archs = ["x86_64", "arm64"]
+before-all = [
+    "curl -L https://github.com/AOMediaCodec/libavif/archive/v0.11.1.tar.gz | tar xzf -",
+    "cd libavif-0.11.1 && cmake -S . -B build -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES='arm64;x86_64' && cmake --build build --parallel && cmake --install build",
+]
+
 
 [tool.ruff]
 line-length = 79
