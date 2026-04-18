@@ -71,6 +71,19 @@ ignore = [
 
 [tool.setuptools_scm]
 
+[tool.cibuildwheel]
+build = "cp311-* cp312-* cp313-* cp314-* pp311-*"
+before-all = [
+    "curl -L https://github.com/AOMediaCodec/libavif/archive/v0.11.1.tar.gz | tar xzf -",
+    "cd libavif-0.11.1 && cmake -S . -B build -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON && cmake --build build --parallel && cmake --install build",
+]
+
+[tool.cibuildwheel.linux]
+archs = ["x86_64"]
+
+[tool.cibuildwheel.macos]
+archs = ["arm64"]
+
 [tool.ruff]
 line-length = 79
 extend-exclude = ["libavif-*"]

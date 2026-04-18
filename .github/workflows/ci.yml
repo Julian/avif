@@ -86,8 +86,24 @@ jobs:
       - name: Run nox
         run: uvx nox -s "${{ matrix.noxenv }}" -- ${{ matrix.posargs }}
 
-  packaging:
+  build_wheels:
     needs: ci
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: pypa/cibuildwheel@v2
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.os }}
+          path: wheelhouse/*.whl
+
+  packaging:
+    needs: build_wheels
     runs-on: ubuntu-latest
     environment:
       name: PyPI
@@ -99,22 +115,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - name: Install libavif
-        run: >
-          curl -L 'https://github.com/AOMediaCodec/libavif/archive/v0.11.1.tar.gz' | tar xzf - &&
-          cd libavif* &&
-          mkdir build && cd build &&
-          cmake .. &&
-          make -j $(($(nproc) + 1)) &&
-          sudo make install
+        with:
+          fetch-depth: 0
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
 
-      - name: Build our distributions
-        run: uv run --frozen --with 'build[uv]' -m build --installer=uv
+      - name: Build sdist
+        run: uv run --frozen --with 'build[uv]' -m build --sdist --installer=uv
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
 
       - name: Publish to PyPI
         if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
