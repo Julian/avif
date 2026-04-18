@@ -73,6 +73,7 @@ ignore = [
 
 [tool.cibuildwheel]
 build = "cp311-* cp312-* cp313-* cp314-* pp311-*"
+enable = ["pypy"]
 
 [tool.cibuildwheel.linux]
 archs = ["x86_64", "i686", "aarch64", "ppc64le", "s390x", "armv7l"]
