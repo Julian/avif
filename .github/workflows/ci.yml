@@ -99,7 +99,7 @@ jobs:
           fetch-depth: 0
       - uses: docker/setup-qemu-action@v3
         if: runner.os == 'Linux'
-      - uses: pypa/cibuildwheel@v3
+      - uses: pypa/cibuildwheel@v3.4.1
       - uses: actions/upload-artifact@v4
         with:
           name: wheels-${{ matrix.os }}
