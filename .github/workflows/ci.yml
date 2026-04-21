@@ -110,7 +110,7 @@ jobs:
           key: libavif-0.11.1
       - name: Download libavif source
         run: test -f libavif-0.11.1.tar.gz || curl -fL --retry 3 -o libavif-0.11.1.tar.gz https://github.com/AOMediaCodec/libavif/archive/v0.11.1.tar.gz
-      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-qemu-action@v4
         if: runner.os == 'Linux'
       - uses: pypa/cibuildwheel@v3.4.1
       - uses: actions/upload-artifact@v4
